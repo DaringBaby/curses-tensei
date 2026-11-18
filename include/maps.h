@@ -1,4 +1,12 @@
 #pragma once
+#include <string>
+#include <vector>
+
+struct Chest {
+    int id;
+    bool is_open;
+    std::string loot;
+};
 
 inline int sample_map[10][10] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -11,4 +19,9 @@ inline int sample_map[10][10] = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 1, 1, 1, 1, 1, 1, 2, 1},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+};
+
+inline std::vector<Chest> chests = {
+    {2, false, "Katana"},
+    {3, false, "Healing Bead"}
 };

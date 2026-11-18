@@ -1,5 +1,6 @@
 #include "include/gui.h"
 #include "include/curses.h"
+#include "include/player_vars.h"
 
 void print_gui(WINDOW* win1, WINDOW* win2, WINDOW* party_win, WINDOW* quests_win) {
     box(win1, 0, 0);
@@ -13,6 +14,7 @@ void print_gui(WINDOW* win1, WINDOW* win2, WINDOW* party_win, WINDOW* quests_win
     mvwprintw(party_win, 0, (PARTY_WIDTH - titolo3.length())/2, titolo3.c_str());
     mvwprintw(quests_win, 0, (QUESTS_WIDTH - titolo4.length())/2, titolo4.c_str());
     // mvwprintw(win3, 0, (ITEM_WIDTH - titolo2.length())/2, "Equip");
+    draw_inventory(win2);
     wrefresh(win1);
     wrefresh(win2);
     // wrefresh(win3);
@@ -79,4 +81,10 @@ void set_text(WINDOW* textbox, std::string message) {
             }
         }
     wrefresh(textbox);
+}
+
+void draw_inventory(WINDOW* inventory_win) {
+    for (int i = 0; i < inventory.size() && i < ITEM_HEIGHT - 2; i++) {
+        mvwprintw(inventory_win, 1, 2, inventory[i].c_str());
+    }
 }

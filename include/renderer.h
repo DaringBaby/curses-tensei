@@ -1,6 +1,7 @@
 #pragma once
 #include "curses.h"
 #include "gui.h"
+#include "events_system.h"
 
 inline int dx[4] = {0, 1, 0, -1};
 inline int dy[4] = {-1, 0, 1, 0};

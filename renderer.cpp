@@ -84,8 +84,11 @@ void render_view(WINDOW *win, Player p) {
 
         if (is_wall(cx + f_dx, cy + f_dy)) {
             draw_front_wall(win, ix, iy, GAME_WIDTH - 1 - ix, GAME_HEIGHT - 1 - iy, shades[d]);
-            if (d == 0 && sample_map[p.x][p.y] == 2) {
-                draw_chest(win, true);
+            if (d == 0 && sample_map[p.x][p.y] >= 2) {
+                int type_event = check_event(sample_map[p.x][p.y]);
+                if (type_event == 1) {
+                    draw_chest(win, check_opened_chest(sample_map[p.x][p.y]));
+                }
             }
         }
     }

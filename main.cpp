@@ -52,11 +52,22 @@ int main(int argc, char** argv)
         render_view(game_win, p);
         render_minimap(map_win, p);
         // set_text(win1, "Hola! que tal");
-
         ch = getch();
-        if (ch == 'q' || ch == 'Q') break;
 
+        if (ch == 'q' || ch == 'Q') break;
         int nx = p.x, ny = p.y;
+
+        // interazione
+        if (ch == '\n' || ch == '\r' || ch == KEY_ENTER || ch == ' ') {
+            int event =  check_event_present(0, nx, ny);
+            if ( event > 0) {
+                if (check_event(event) == 1) {
+                    // chest
+                    set_text(win1, "You obtained: " +  get_chest_item(event) + ".");
+                }
+            }
+        }
+
         if (ch == 'w' || ch == KEY_UP) {
             nx += dx[p.dir];
             ny += dy[p.dir];
