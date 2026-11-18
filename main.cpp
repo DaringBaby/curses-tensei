@@ -14,10 +14,6 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-
-
-
-
     initscr();
     resize_term(32, 105);
     noecho();
@@ -55,6 +51,7 @@ int main(int argc, char** argv)
         print_gui(win1, win2, party_win, quests_win);
         render_view(game_win, p);
         render_minimap(map_win, p);
+        // set_text(win1, "Hola! que tal");
 
         ch = getch();
         if (ch == 'q' || ch == 'Q') break;
@@ -78,7 +75,6 @@ int main(int argc, char** argv)
             p.y = ny;
         }
     }
-
     delwin(game_win);
     delwin(map_win);
     endwin();
@@ -87,3 +83,6 @@ int main(int argc, char** argv)
     endwin();
     return 0;
 }
+
+// TODO: OPEN CHEST
+// EVENT SYSTEM

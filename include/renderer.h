@@ -10,3 +10,4 @@ void draw_front_wall(WINDOW *win, int x1, int y1, int x2, int y2, char fill);
 void draw_side_wall(WINDOW *win, int is_left, int outer_x, int outer_y, int inner_x, int inner_y, char fill);
 void draw_side_opening(WINDOW *win, int is_left, int outer_x, int outer_y, int inner_x, int inner_y, char fill);
 void render_view(WINDOW *win, Player p);
+void draw_chest(WINDOW *win, bool is_open = false);

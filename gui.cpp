@@ -34,7 +34,19 @@ void render_minimap(WINDOW *win, Player p) {
                 mvwaddch(win, y + 2, x * 2 + 2, dir_chars[p.dir]);
                 wattroff(win, A_BOLD | A_REVERSE);
             } else {
-                mvwaddch(win, y + 2, x * 2 + 2, sample_map[y][x] ? '#' : '.');
+                char c = sample_map[y][x];
+                switch (c) {
+                    case 0:
+                        c = '.';
+                        break;
+                    case 1:
+                        c = '#';
+                        break;
+                    case 2:
+                        c = '.';
+                        break;
+                }
+                mvwaddch(win, y + 2, x * 2 + 2, c);
             }
         }
     }
@@ -51,4 +63,20 @@ void draw_player_team_status(std::vector<Character> party, WINDOW* party_win) {
         mvwprintw(party_win, 1 + i * 2, 12, "Lv. %d", party[i].get_level());
         mvwprintw(party_win, 2 + 2 * i, 2, "HP:%d/%d MP:%d", party[i].get_hp(), party[i].get_max_hp(), party[i].get_mp());
     }
+}
+
+
+void set_text(WINDOW* textbox, std::string message) {
+    mvwprintw(textbox, 1, 2, "%s", message.c_str());
+    mvwprintw(textbox, TEXTBOX_HEIGHT - 2, TEXTBOX_WIDTH - 12, "[ENTER...]");
+    wrefresh(textbox);
+
+    int k;
+        while (1) {
+            k = getch();
+            if (k == '\n' || k == '\r' || k == KEY_ENTER || k == ' ') {
+                break;
+            }
+        }
+    wrefresh(textbox);
 }

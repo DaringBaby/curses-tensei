@@ -84,8 +84,64 @@ void render_view(WINDOW *win, Player p) {
 
         if (is_wall(cx + f_dx, cy + f_dy)) {
             draw_front_wall(win, ix, iy, GAME_WIDTH - 1 - ix, GAME_HEIGHT - 1 - iy, shades[d]);
+            if (d == 0 && sample_map[p.x][p.y] == 2) {
+                draw_chest(win, true);
+            }
         }
     }
+
+    wrefresh(win);
+}
+
+void draw_chest(WINDOW *win, bool is_open) {
+    const int CHEST_H = 8;
+    const int CHEST_W = 20;
+
+    const char* closed_chest[CHEST_H] = {
+        "    ____________    ",
+        "   /   ______   \\   ",
+        "  /___/______\\___\\  ",
+        " |================| ",
+        " |======[()]======| ",
+        " |   |        |   | ",
+        " |   |        |   | ",
+        " |___|________|___| "
+    };
+
+    const char* open_chest[CHEST_H] = {
+        "   ______________   ",
+        "  /              \\  ",
+        " |================| ",
+        "  \\______________/  ",
+        " |   |  *.:.* |   | ",
+        " |===|========|===| ",
+        " |   |        |   | ",
+        " |___|________|___| "
+    };
+
+    const char** sprite = is_open ? open_chest : closed_chest;
+
+
+    int start_y = GAME_HEIGHT - CHEST_H - 3;
+    int start_x = (GAME_WIDTH - CHEST_W) / 2;
+
+    wattron(win, COLOR_PAIR(4));
+    for (int y = 0; y < CHEST_H; y++) {
+        int first_char = -1, last_char = -1;
+        for (int x = 0; x < CHEST_W; x++) {
+            if (sprite[y][x] != ' ') {
+                if (first_char == -1) first_char = x;
+                last_char = x;
+            }
+        }
+
+        if (first_char != -1) {
+            for (int x = first_char; x <= last_char; x++) {
+                mvwaddch(win, start_y + y, start_x + x, sprite[y][x]);
+            }
+        }
+    }
+    wattroff(win, COLOR_PAIR(4));
 
     wrefresh(win);
 }

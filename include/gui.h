@@ -38,3 +38,4 @@ inline string titolo4 = "Quests";
 void print_gui(WINDOW* win1, WINDOW* win2, WINDOW* party_win, WINDOW* quests_win);
 void render_minimap(WINDOW *win, Player p);
 void draw_player_team_status(std::vector<Character> party, WINDOW* party_win);
+void set_text(WINDOW* textbox, std::string message);
