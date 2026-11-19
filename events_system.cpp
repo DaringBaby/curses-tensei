@@ -28,8 +28,8 @@ std::string get_chest_item(int chest_id) {
     for (auto& chest : chests) {
         if (chest_id == chest.id && !chest.is_open) {
             chest.is_open = true;
-            inventory.push_back(chest.loot);
-            return chest.loot;
+            add_item(chest.item_id, 1);
+            return get_item_by_id(chest.item_id).name;
         }
     }
     return "Nothing";

@@ -4,6 +4,7 @@
 #include "curses.h"
 #include "maps.h"
 #include "character.h"
+#include "player_vars.h"
 using namespace std;
 
 #define GAME_WIDTH 48

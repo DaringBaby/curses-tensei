@@ -1,5 +1,6 @@
 #pragma once
 #include "maps.h"
+#include "items.h"
 #include "player_vars.h"
 int check_event(int event_id);          // 0: person, 1: chest
 bool check_opened_chest(int chest_id);

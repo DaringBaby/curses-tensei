@@ -84,7 +84,10 @@ void set_text(WINDOW* textbox, std::string message) {
 }
 
 void draw_inventory(WINDOW* inventory_win) {
-    for (int i = 0; i < inventory.size() && i < ITEM_HEIGHT - 2; i++) {
-        mvwprintw(inventory_win, 1, 2, inventory[i].c_str());
+    for (int i = 0; i < (int)inventory.size() && i < ITEM_HEIGHT - 2; i++) {
+        Item item = get_item_by_id(inventory[i].item_id);
+        mvwprintw(inventory_win, 1 + (i * 2), 2, "%-17s", item.name.c_str());
+        mvwprintw(inventory_win, 2 + (i * 2), 16, "x%d", inventory[i].quantity);
     }
+    wrefresh(inventory_win);
 }

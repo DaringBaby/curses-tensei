@@ -5,7 +5,7 @@
 struct Chest {
     int id;
     bool is_open;
-    std::string loot;
+    int item_id;
 };
 
 inline int sample_map[10][10] = {
@@ -22,6 +22,6 @@ inline int sample_map[10][10] = {
 };
 
 inline std::vector<Chest> chests = {
-    {2, false, "Katana"},
-    {3, false, "Healing Bead"}
+    {2, false, 52},
+    {3, false, 3}
 };

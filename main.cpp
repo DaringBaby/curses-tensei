@@ -4,6 +4,8 @@
 #include "include/gui.h"
 #include "include/renderer.h"
 #include "maps.h"
+#include "include/player_vars.h"
+#include "include/items.h"
 using namespace std;
 
 
@@ -20,6 +22,17 @@ int main(int argc, char** argv)
     refresh();
     keypad(stdscr, TRUE);
     start_color();
+
+    inventory = {
+            {1, 5},
+            {10, 1},
+            {15, 2},
+            {25, 3},
+            {52, 1},
+            {64, 20},
+            {65, 10}
+        };
+
 
     init_pair(1, COLOR_GREEN, COLOR_BLACK);
     init_pair(2, COLOR_CYAN, COLOR_BLACK);
