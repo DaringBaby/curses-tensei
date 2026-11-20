@@ -5,6 +5,7 @@
 #include "maps.h"
 #include "character.h"
 #include "player_vars.h"
+#include <cmath>
 using namespace std;
 
 #define GAME_WIDTH 48
@@ -35,6 +36,11 @@ inline string titolo = "Textbox";
 inline string titolo2 = "Items";
 inline string titolo3 = "Party";
 inline string titolo4 = "Quests";
+
+inline int page_offset = 1;
+inline int item_per_page = 8;
+inline int max_item_page;
+inline int selected = 0;
 
 void print_gui(WINDOW* win1, WINDOW* win2, WINDOW* party_win, WINDOW* quests_win);
 void render_minimap(WINDOW *win, Player p);

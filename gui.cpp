@@ -84,10 +84,27 @@ void set_text(WINDOW* textbox, std::string message) {
 }
 
 void draw_inventory(WINDOW* inventory_win) {
-    for (int i = 0; i < (int)inventory.size() && i < ITEM_HEIGHT - 2; i++) {
+    int start = (page_offset-1) * item_per_page;
+    int end = std::min((int)inventory.size(), page_offset * item_per_page);
+    werase(inventory_win);
+    box(inventory_win, 0, 0);
+    max_item_page = ceil((float)inventory.size() / item_per_page);
+    mvwprintw(inventory_win, ITEM_HEIGHT-1, 1, "%d/%d", page_offset, max_item_page);
+    for (int i = start; i < end; i++) {
+        int row = i - start;
         Item item = get_item_by_id(inventory[i].item_id);
-        mvwprintw(inventory_win, 1 + (i * 2), 2, "%-17s", item.name.c_str());
-        mvwprintw(inventory_win, 2 + (i * 2), 16, "x%d", inventory[i].quantity);
+
+        if (i == selected) {
+            wattron(inventory_win, A_REVERSE);
+        }
+
+        mvwprintw(inventory_win, 1 + (row * 2), 2, "%-17s", item.name.c_str());
+        mvwprintw(inventory_win, 2 + (row * 2), 16, "x%d", inventory[i].quantity);
+
+        if (i == selected) {
+            wattroff(inventory_win, A_REVERSE);
+
+        }
     }
     wrefresh(inventory_win);
 }

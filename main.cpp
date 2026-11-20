@@ -8,6 +8,12 @@
 #include "include/items.h"
 using namespace std;
 
+enum game_states {
+    FIELD, ITEM_MENU, // others to add
+};
+
+int current_state;
+
 
 
 
@@ -22,9 +28,13 @@ int main(int argc, char** argv)
     refresh();
     keypad(stdscr, TRUE);
     start_color();
-
+    current_state = game_states::FIELD;
     inventory = {
             {1, 5},
+            {2, 5},
+            {3, 5},
+            {4, 5},
+            {16, 1},
             {10, 1},
             {15, 2},
             {25, 3},
@@ -70,29 +80,57 @@ int main(int argc, char** argv)
         if (ch == 'q' || ch == 'Q') break;
         int nx = p.x, ny = p.y;
 
+
+        if (ch == 'u') {
+            current_state = game_states::FIELD;
+        }
+        else if (ch == 'i') {
+            current_state = game_states::ITEM_MENU;
+        }
+
         // interazione
-        if (ch == '\n' || ch == '\r' || ch == KEY_ENTER || ch == ' ') {
-            int event =  check_event_present(0, nx, ny);
-            if ( event > 0) {
-                if (check_event(event) == 1) {
-                    // chest
-                    set_text(win1, "You obtained: " +  get_chest_item(event) + ".");
+        switch (current_state) {
+        case game_states::FIELD:
+            if (ch == '\n' || ch == '\r' || ch == KEY_ENTER || ch == ' ') {
+                int event =  check_event_present(0, nx, ny);
+                if ( event > 0) {
+                    if (check_event(event) == 1) {
+                        // chest
+                        set_text(win1, "You obtained: " +  get_chest_item(event) + ".");
+                    }
                 }
             }
-        }
 
-        if (ch == 'w' || ch == KEY_UP) {
-            nx += dx[p.dir];
-            ny += dy[p.dir];
-        } else if (ch == 's' || ch == KEY_DOWN) {
-            nx -= dx[p.dir];
-            ny -= dy[p.dir];
-        } else if (ch == 'a' || ch == KEY_LEFT) {
-            p.dir = (p.dir + 3) % 4; // Gira a sinistra
-        } else if (ch == 'd' || ch == KEY_RIGHT) {
-            p.dir = (p.dir + 1) % 4; // Gira a destra
-        }
+            if (ch == 'w' || ch == KEY_UP) {
+                nx += dx[p.dir];
+                ny += dy[p.dir];
+            } else if (ch == 's' || ch == KEY_DOWN) {
+                nx -= dx[p.dir];
+                ny -= dy[p.dir];
+            } else if (ch == 'a' || ch == KEY_LEFT) {
+                p.dir = (p.dir + 3) % 4; // Gira a sinistra
+            } else if (ch == 'd' || ch == KEY_RIGHT) {
+                p.dir = (p.dir + 1) % 4; // Gira a destra
+            }
+            break;
 
+        case game_states::ITEM_MENU:
+            if (ch == KEY_UP && selected > item_per_page * (page_offset-1)) {
+                selected--;
+            }
+            else if (ch == KEY_DOWN && selected < inventory.size() && selected < (page_offset * item_per_page)-1) {
+                selected++;
+            }
+            if (ch == 'z' && page_offset > 1) {
+                page_offset--;
+                selected = (item_per_page * page_offset) - 1;
+            }
+            else if (ch == 'x' && page_offset < max_item_page) {
+                page_offset++;
+                selected = (item_per_page * (page_offset-1));
+            }
+            break;
+        }
         // Collisione
         if (!is_wall(nx, ny)) {
             p.x = nx;
