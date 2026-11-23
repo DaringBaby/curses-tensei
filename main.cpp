@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <iostream>
 #include "include/curses.h"
 #include "include/gui.h"
 #include "include/renderer.h"
@@ -9,7 +10,7 @@
 using namespace std;
 
 enum game_states {
-    FIELD, ITEM_MENU, // others to add
+    FIELD, ITEM_MENU, USE_ITEM_ON_CHAR // others to add
 };
 
 int current_state;
@@ -82,9 +83,11 @@ int main(int argc, char** argv)
 
 
         if (ch == 'u') {
+            selected = -1;
             current_state = game_states::FIELD;
         }
         else if (ch == 'i') {
+            selected = 0;
             current_state = game_states::ITEM_MENU;
         }
 
@@ -121,13 +124,25 @@ int main(int argc, char** argv)
             else if (ch == KEY_DOWN && selected < inventory.size() && selected < (page_offset * item_per_page)-1) {
                 selected++;
             }
-            if (ch == 'z' && page_offset > 1) {
+            else if (ch == 'z' && page_offset > 1) {
                 page_offset--;
                 selected = (item_per_page * page_offset) - 1;
             }
             else if (ch == 'x' && page_offset < max_item_page) {
                 page_offset++;
                 selected = (item_per_page * (page_offset-1));
+            }
+            else if (ch == '\n' && get_item_by_id(inventory[selected].item_id).activable_outside_battle) {
+                current_state = game_states::USE_ITEM_ON_CHAR;
+                selected_member = 0;
+            }
+            break;
+        case game_states::USE_ITEM_ON_CHAR:
+            if (ch == KEY_UP && selected_member > 0) {
+                selected_member--;
+            }
+            else if (ch == KEY_DOWN && selected_member < party.size()-1) {
+                selected_member++;
             }
             break;
         }

@@ -60,9 +60,21 @@ void render_minimap(WINDOW *win, Player p) {
 void draw_player_team_status(std::vector<Character> party, WINDOW* party_win) {
     for (int i = 0; i < party.size(); i++) {
         wattron(party_win, COLOR_PAIR(4) | A_BOLD);
+
+        if (selected_member == i) {
+            wattron(party_win, A_REVERSE);
+        }
+
         mvwprintw(party_win, 1 + i * 2, 1, party[i].get_name().c_str());
+
+
+
         wattroff(party_win, COLOR_PAIR(4) | A_BOLD);
         mvwprintw(party_win, 1 + i * 2, 12, "Lv. %d", party[i].get_level());
+
+        if (selected_member == i) {
+            wattroff(party_win, A_REVERSE);
+        }
         mvwprintw(party_win, 2 + 2 * i, 2, "HP:%d/%d MP:%d", party[i].get_hp(), party[i].get_max_hp(), party[i].get_mp());
     }
 }
@@ -99,12 +111,16 @@ void draw_inventory(WINDOW* inventory_win) {
         }
 
         mvwprintw(inventory_win, 1 + (row * 2), 2, "%-17s", item.name.c_str());
-        mvwprintw(inventory_win, 2 + (row * 2), 16, "x%d", inventory[i].quantity);
 
         if (i == selected) {
             wattroff(inventory_win, A_REVERSE);
 
         }
+        mvwprintw(inventory_win, 2 + (row * 2), 16, "x%d", inventory[i].quantity);
     }
     wrefresh(inventory_win);
+}
+
+void use_item() {
+
 }
