@@ -68,7 +68,7 @@ int main(int argc, char** argv)
     box(game_win, 0, 0);
 
 
-    vector<Character> party = create_random_party();
+    party = create_random_party();
 
     while (1) {
         draw_player_team_status(party, party_win);
@@ -111,9 +111,9 @@ int main(int argc, char** argv)
                 nx -= dx[p.dir];
                 ny -= dy[p.dir];
             } else if (ch == 'a' || ch == KEY_LEFT) {
-                p.dir = (p.dir + 3) % 4; // Gira a sinistra
+                p.dir = (p.dir + 3) % 4; // gira a sinistra
             } else if (ch == 'd' || ch == KEY_RIGHT) {
-                p.dir = (p.dir + 1) % 4; // Gira a destra
+                p.dir = (p.dir + 1) % 4; // gira a destra
             }
             break;
 
@@ -121,7 +121,7 @@ int main(int argc, char** argv)
             if (ch == KEY_UP && selected > item_per_page * (page_offset-1)) {
                 selected--;
             }
-            else if (ch == KEY_DOWN && selected < inventory.size() && selected < (page_offset * item_per_page)-1) {
+            else if (ch == KEY_DOWN && selected < inventory.size()-1 && selected < (page_offset * item_per_page)-1) {
                 selected++;
             }
             else if (ch == 'z' && page_offset > 1) {
@@ -133,9 +133,20 @@ int main(int argc, char** argv)
                 selected = (item_per_page * (page_offset-1));
             }
             else if (ch == '\n' && get_item_by_id(inventory[selected].item_id).activable_outside_battle) {
-                current_state = game_states::USE_ITEM_ON_CHAR;
-                selected_member = 0;
+                if (get_item_by_id(inventory[selected].item_id).target_number == TargetNumber::ALL) {
+                    use_item_on_char(true);
+                    use_item(inventory[selected].item_id);
+                    selected = 0;
+                    page_offset = 1;
+                    current_state = game_states::ITEM_MENU;
+                }
+                else {
+                    current_state = game_states::USE_ITEM_ON_CHAR;
+                    selected_member = 0;
+                }
             }
+
+            show_item_description(win1);
             break;
         case game_states::USE_ITEM_ON_CHAR:
             if (ch == KEY_UP && selected_member > 0) {
@@ -144,9 +155,17 @@ int main(int argc, char** argv)
             else if (ch == KEY_DOWN && selected_member < party.size()-1) {
                 selected_member++;
             }
+            else if (ch == '\n') {
+                use_item_on_char(false);
+                selected_member = -1;
+                use_item(inventory[selected].item_id);
+                selected = 0;
+                page_offset = 1;
+                current_state = game_states::ITEM_MENU;
+            }
             break;
         }
-        // Collisione
+        // collisione
         if (!is_wall(nx, ny)) {
             p.x = nx;
             p.y = ny;

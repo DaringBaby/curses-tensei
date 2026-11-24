@@ -48,3 +48,5 @@ void render_minimap(WINDOW *win, Player p);
 void draw_player_team_status(std::vector<Character> party, WINDOW* party_win);
 void set_text(WINDOW* textbox, std::string message);
 void draw_inventory(WINDOW* inventory_win);
+void use_item_on_char(bool all);
+void show_item_description(WINDOW* textbox);

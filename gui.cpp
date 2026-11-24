@@ -1,5 +1,7 @@
 #include "include/gui.h"
+#include "include/character.h"
 #include "include/curses.h"
+#include "include/items.h"
 #include "include/player_vars.h"
 
 void print_gui(WINDOW* win1, WINDOW* win2, WINDOW* party_win, WINDOW* quests_win) {
@@ -121,6 +123,70 @@ void draw_inventory(WINDOW* inventory_win) {
     wrefresh(inventory_win);
 }
 
-void use_item() {
+void use_item_on_char(bool all) {
+    Item item = get_item_by_id(inventory[selected].item_id);
 
+    int start;
+    int end;
+
+    if (all) {
+        start = 0;
+        end = (int)party.size();
+    } else {
+        start = selected_member;
+        end = selected_member + 1;
+    }
+
+    for (int i = start; i < end; i++) {
+        switch (item.type) {
+            case ItemType::HEALING_HP:
+                if (party[i].is_alive()) {
+                    party[i].heal(item.amount);
+                }
+                break;
+
+            case ItemType::HEALING_MP:
+                party[i].restore_mp(item.amount);
+                break;
+
+            case ItemType::HEALING_BOTH:
+                if (party[i].is_alive()) {
+                    party[i].heal(item.amount);
+                }
+                party[i].restore_mp(item.amount);
+                break;
+
+            case ItemType::REVIVE:
+                if (!party[i].is_alive()) {
+                    party[i].heal(item.amount);
+                }
+                break;
+
+            case ItemType::CURE_STATUS:
+                if (item.status == StatusEffect::NONE) {
+                    party[i].set_status("Normal");
+                } else if (item.status == StatusEffect::POISON && party[i].get_status() == "Poison") {
+                    party[i].set_status("Normal");
+                } else if (item.status == StatusEffect::PARALYSIS && party[i].get_status() == "Paralysis") {
+                    party[i].set_status("Normal");
+                } else if (item.status == StatusEffect::SLEEP && party[i].get_status() == "Sleep") {
+                    party[i].set_status("Normal");
+                } else if (item.status == StatusEffect::CHARM && party[i].get_status() == "Charm") {
+                    party[i].set_status("Normal");
+                } else if (item.status == StatusEffect::MUTE && party[i].get_status() == "Mute") {
+                    party[i].set_status("Normal");
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+void show_item_description(WINDOW* textbox) {
+    wclear(textbox);
+    Item item = get_item_by_id(inventory[selected].item_id);
+    mvwprintw(textbox, 1, 2, item.desc.c_str());
+    wrefresh(textbox);
 }

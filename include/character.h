@@ -13,7 +13,7 @@ private:
     int exp;
     int exp_to_next_level;
 
-    std::string status;
+    std::string status;     // Normal, Poison, Paralysis, Sleep, Charm, Mute
 
     int hp;
     int max_hp;

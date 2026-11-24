@@ -1,9 +1,10 @@
 #pragma once
+#include "player_vars.h"
 #include <string>
 #include <vector>
 
 enum class ItemType {
-    HEALING, DAMAGING, REVIVE, BUFF, CURE_STATUS, PUT_STATUS, EQUIP, KEY
+    HEALING_HP, HEALING_MP, HEALING_BOTH, DAMAGING, REVIVE, BUFF, PERMABUFF, CURE_STATUS, PUT_STATUS, EQUIP, KEY
 };
 
 enum class EquipType {
@@ -27,7 +28,7 @@ struct Item {
     std::string name = "";
     std::string desc = "";
 
-    ItemType type = ItemType::HEALING;
+    ItemType type = ItemType::HEALING_HP;
     EquipType equip_type = EquipType::NONE;
     TargetNumber target_number = TargetNumber::SINGLE;
     TargetType target_type = TargetType::PLAYER;
@@ -51,27 +52,51 @@ struct Item {
 inline std::vector<Item> item_db = {
     {
         .id = 1, .name = "Medicine", .desc = "Restores 50 HP to one ally.",
-        .type = ItemType::HEALING, .target_number = TargetNumber::SINGLE, .target_type = TargetType::PLAYER,
+        .type = ItemType::HEALING_HP, .target_number = TargetNumber::SINGLE, .target_type = TargetType::PLAYER,
         .amount = 50, .activable_in_battle = true, .activable_outside_battle = true,
         .buy_cost = 50, .sell_cost = 25
     },
     {
         .id = 2, .name = "Life Stone", .desc = "Restores 100 HP to one ally.",
-        .type = ItemType::HEALING, .target_number = TargetNumber::SINGLE, .target_type = TargetType::PLAYER,
+        .type = ItemType::HEALING_HP, .target_number = TargetNumber::SINGLE, .target_type = TargetType::PLAYER,
         .amount = 100, .activable_in_battle = true, .activable_outside_battle = true,
         .buy_cost = 150, .sell_cost = 75
     },
     {
         .id = 3, .name = "Bead", .desc = "Fully restores HP to one ally.",
-        .type = ItemType::HEALING, .target_number = TargetNumber::SINGLE, .target_type = TargetType::PLAYER,
+        .type = ItemType::HEALING_HP, .target_number = TargetNumber::SINGLE, .target_type = TargetType::PLAYER,
         .amount = 9999, .activable_in_battle = true, .activable_outside_battle = true,
         .buy_cost = 600, .sell_cost = 300
     },
     {
         .id = 4, .name = "Bead Chain", .desc = "Fully restores HP to the whole party.",
-        .type = ItemType::HEALING, .target_number = TargetNumber::ALL, .target_type = TargetType::PLAYER,
+        .type = ItemType::HEALING_HP, .target_number = TargetNumber::ALL, .target_type = TargetType::PLAYER,
         .amount = 9999, .activable_in_battle = true, .activable_outside_battle = true,
         .buy_cost = 1500, .sell_cost = 750
+    },
+    {
+        .id = 5, .name = "Chakra Drop", .desc = "Restores 30 MP to one ally.",
+        .type = ItemType::HEALING_MP, .target_number = TargetNumber::SINGLE, .target_type = TargetType::PLAYER,
+        .amount = 30, .activable_in_battle = true, .activable_outside_battle = true,
+        .buy_cost = 200, .sell_cost = 100
+    },
+    {
+        .id = 6, .name = "Chakra Pot", .desc = "Fully restores MP to one ally.",
+        .type = ItemType::HEALING_MP, .target_number = TargetNumber::SINGLE, .target_type = TargetType::PLAYER,
+        .amount = 9999, .activable_in_battle = true, .activable_outside_battle = true,
+        .buy_cost = 800, .sell_cost = 400
+    },
+    {
+        .id = 7, .name = "Soma Droplet", .desc = "Fully restores HP and MP to one ally.",
+        .type = ItemType::HEALING_BOTH, .target_number = TargetNumber::SINGLE, .target_type = TargetType::PLAYER,
+        .amount = 9999, .activable_in_battle = true, .activable_outside_battle = true,
+        .buy_cost = 1800, .sell_cost = 900
+    },
+    {
+        .id = 8, .name = "Soma", .desc = "Fully restores HP and MP to the whole party.",
+        .type = ItemType::HEALING_BOTH, .target_number = TargetNumber::ALL, .target_type = TargetType::PLAYER,
+        .amount = 9999, .activable_in_battle = true, .activable_outside_battle = true,
+        .buy_cost = 4000, .sell_cost = 2000
     },
     {
         .id = 10, .name = "Balm of Rising", .desc = "Revives a fallen ally with 50% HP.",
