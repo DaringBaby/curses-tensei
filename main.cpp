@@ -10,7 +10,7 @@
 using namespace std;
 
 enum game_states {
-    FIELD, ITEM_MENU, USE_ITEM_ON_CHAR // others to add
+    FIELD, ITEM_MENU, USE_ITEM_ON_CHAR, SELECT_CHARA_STATUS, STATUS_MENU // others to add
 };
 
 int current_state;
@@ -59,6 +59,7 @@ int main(int argc, char** argv)
     WINDOW* game_win = newwin(GAME_HEIGHT, GAME_WIDTH, 0, 25);
     WINDOW* party_win = newwin(PARTY_HEIGHT, PARTY_WIDTH, 19, 1);
     WINDOW* quests_win = newwin(QUESTS_HEIGHT, QUESTS_WIDTH, 16, 77);
+    WINDOW* chara_status = newwin(STATUS_HEIGHT, STATUS_WIDTH, 1, 38);
 
     Player p = {1, 1, 1};
     int ch;
@@ -76,6 +77,9 @@ int main(int argc, char** argv)
         render_view(game_win, p);
         render_minimap(map_win, p);
         // set_text(win1, "Hola! que tal");
+        if (current_state == game_states::STATUS_MENU) {
+                draw_character_status(chara_status);
+            }
         ch = getch();
 
         if (ch == 'q' || ch == 'Q') break;
@@ -84,11 +88,16 @@ int main(int argc, char** argv)
 
         if (ch == 'u') {
             selected = -1;
+            selected_member = -1;
             current_state = game_states::FIELD;
         }
         else if (ch == 'i') {
             selected = 0;
             current_state = game_states::ITEM_MENU;
+        }
+        else if (ch == 'o') {
+            selected_member = 0;
+            current_state = game_states::SELECT_CHARA_STATUS;
         }
 
         // interazione
@@ -163,6 +172,19 @@ int main(int argc, char** argv)
                 page_offset = 1;
                 current_state = game_states::ITEM_MENU;
             }
+            break;
+        case game_states::SELECT_CHARA_STATUS:
+            if (ch == KEY_UP && selected_member > 0) {
+                selected_member--;
+            }
+            else if (ch == KEY_DOWN && selected_member < party.size()-1) {
+                selected_member++;
+            }
+            else if (ch == '\n') {
+                current_state = game_states::STATUS_MENU;
+            }
+            break;
+        case game_states::STATUS_MENU:
             break;
         }
         // collisione

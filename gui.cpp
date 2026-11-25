@@ -190,3 +190,32 @@ void show_item_description(WINDOW* textbox) {
     mvwprintw(textbox, 1, 2, item.desc.c_str());
     wrefresh(textbox);
 }
+
+void draw_character_status(WINDOW *status) {
+    wclear(status);
+    box(status, 0, 0);
+    mvwprintw(status, 0, (STATUS_WIDTH-6)/2, "STATUS");
+    mvwprintw(status, 1, 2, "Name: %s", party[selected_member].get_name().c_str());
+    mvwprintw(status, 2, 2, "Level: %d", party[selected_member].get_level());
+    mvwprintw(status, 3, 2, "Exp:  %d", party[selected_member].get_exp());
+    mvwprintw(status, 4, 2, "Next: %d", party[selected_member].get_exp());
+    mvwprintw(status, 5, 2, "HP: %d/%d", party[selected_member].get_hp(), party[selected_member].get_max_hp());
+    mvwprintw(status, 6, 2, "MP: %d/%d", party[selected_member].get_mp(), party[selected_member].get_max_mp());
+    mvwprintw(status, 7, 2, "Attack: %d", party[selected_member].get_current_attack());
+    mvwprintw(status, 8, 2, "Defense: %d", party[selected_member].get_current_defense());
+    mvwprintw(status, 9, 2, "Intelligence: %d", party[selected_member].get_current_magic_attack());
+    mvwprintw(status, 10, 2, "Magic Res: %d", party[selected_member].get_current_magic_resistance());
+    mvwprintw(status, 11, 2, "Speed: %d", party[selected_member].get_current_speed());
+    mvwprintw(status, 12, 2, "Luck: %d", party[selected_member].get_current_luck());
+    mvwprintw(status, 13, 2, "##### EQUIP #####");
+    mvwprintw(status, 14, 2, party[selected_member].get_weapon().c_str());
+    mvwprintw(status, 15, 2, party[selected_member].get_gun().c_str());
+    mvwprintw(status, 16, 2, party[selected_member].get_bullet().c_str());
+    mvwprintw(status, 17, 2, party[selected_member].get_head().c_str());
+    mvwprintw(status, 18, 2, party[selected_member].get_body().c_str());
+    mvwprintw(status, 19, 2, party[selected_member].get_gloves().c_str());
+    mvwprintw(status, 20, 2, party[selected_member].get_legs().c_str());
+
+    wrefresh(status);
+    return;
+}

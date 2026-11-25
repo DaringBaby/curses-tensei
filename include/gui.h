@@ -15,13 +15,16 @@ using namespace std;
 #define TEXTBOX_HEIGHT 5
 
 #define ITEM_WIDTH 20
-#define ITEM_HEIGHT 19
+#define ITEM_HEIGHT 18
 
 #define PARTY_WIDTH 20
 #define PARTY_HEIGHT 10
 
 #define QUESTS_WIDTH 24
 #define QUESTS_HEIGHT 13
+
+#define STATUS_WIDTH 21
+#define STATUS_HEIGHT 22
 
 #define MAP_H 10
 #define MAP_W 10
@@ -50,3 +53,4 @@ void set_text(WINDOW* textbox, std::string message);
 void draw_inventory(WINDOW* inventory_win);
 void use_item_on_char(bool all);
 void show_item_description(WINDOW* textbox);
+void draw_character_status(WINDOW* status);
