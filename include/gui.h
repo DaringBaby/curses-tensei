@@ -45,6 +45,10 @@ inline int item_per_page = 8;
 inline int max_item_page;
 inline int selected = -1;
 inline int selected_member = -1;
+inline int selected_equip_slot = -1;
+inline int selected_equip = -1;
+inline int max_equip = 0;
+
 
 void print_gui(WINDOW* win1, WINDOW* win2, WINDOW* party_win, WINDOW* quests_win);
 void render_minimap(WINDOW *win, Player p);
@@ -54,3 +58,4 @@ void draw_inventory(WINDOW* inventory_win);
 void use_item_on_char(bool all);
 void show_item_description(WINDOW* textbox);
 void draw_character_status(WINDOW* status);
+void draw_character_equippable(WINDOW* equip_list, WINDOW* desc);

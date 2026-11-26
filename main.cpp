@@ -10,7 +10,7 @@
 using namespace std;
 
 enum game_states {
-    FIELD, ITEM_MENU, USE_ITEM_ON_CHAR, SELECT_CHARA_STATUS, STATUS_MENU // others to add
+    FIELD, ITEM_MENU, USE_ITEM_ON_CHAR, SELECT_CHARA_STATUS, STATUS_MENU, EQUIP_SELECTION // others to add
 };
 
 int current_state;
@@ -80,6 +80,9 @@ int main(int argc, char** argv)
         if (current_state == game_states::STATUS_MENU) {
                 draw_character_status(chara_status);
             }
+        else if (current_state == game_states::EQUIP_SELECTION) {
+        	draw_character_equippable(chara_status, win1);
+        }
         ch = getch();
 
         if (ch == 'q' || ch == 'Q') break;
@@ -89,6 +92,7 @@ int main(int argc, char** argv)
         if (ch == 'u') {
             selected = -1;
             selected_member = -1;
+            selected_equip_slot = -1;
             current_state = game_states::FIELD;
         }
         else if (ch == 'i') {
@@ -181,11 +185,30 @@ int main(int argc, char** argv)
                 selected_member++;
             }
             else if (ch == '\n') {
+            	selected_equip_slot = 0;
                 current_state = game_states::STATUS_MENU;
             }
             break;
         case game_states::STATUS_MENU:
+        	if (ch == KEY_UP && selected_equip_slot > 0) {
+        		selected_equip_slot--;
+        	}
+        	else if (ch == KEY_DOWN && selected_equip_slot < 6) {
+        		selected_equip_slot++;
+        	}
+        	else if (ch == '\n') {
+        		selected_equip = 0;
+        		current_state = game_states::EQUIP_SELECTION;
+        	}
             break;
+        case game_states::EQUIP_SELECTION:
+        	if (ch == KEY_UP && selected_equip > 0) {
+        		selected_equip--;
+        	}
+        	else if (ch == KEY_DOWN && selected_equip < max_equip-1) {
+        		selected_equip++;
+        	}
+        	break;
         }
         // collisione
         if (!is_wall(nx, ny)) {

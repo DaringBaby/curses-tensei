@@ -208,14 +208,83 @@ void draw_character_status(WINDOW *status) {
     mvwprintw(status, 11, 2, "Speed: %d", party[selected_member].get_current_speed());
     mvwprintw(status, 12, 2, "Luck: %d", party[selected_member].get_current_luck());
     mvwprintw(status, 13, 2, "##### EQUIP #####");
+    if (selected_equip_slot == 0) {
+    	wattron(status, A_REVERSE);
+    }
+    else {
+    	wattroff(status, A_REVERSE);
+    }
     mvwprintw(status, 14, 2, party[selected_member].get_weapon().c_str());
+    if (selected_equip_slot == 1) {
+    	wattron(status, A_REVERSE);
+    }
+    else {
+    	wattroff(status, A_REVERSE);
+    }
     mvwprintw(status, 15, 2, party[selected_member].get_gun().c_str());
+    if (selected_equip_slot == 2) {
+    	wattron(status, A_REVERSE);
+    }
+   	else {
+   		wattroff(status, A_REVERSE);
+   	}
     mvwprintw(status, 16, 2, party[selected_member].get_bullet().c_str());
+    if (selected_equip_slot == 3) {
+    	wattron(status, A_REVERSE);
+    }
+    else {
+    	wattroff(status, A_REVERSE);
+    }
     mvwprintw(status, 17, 2, party[selected_member].get_head().c_str());
+    if (selected_equip_slot == 4) {
+    	wattron(status, A_REVERSE);
+    }
+    else {
+    	wattroff(status, A_REVERSE);
+    }
     mvwprintw(status, 18, 2, party[selected_member].get_body().c_str());
+    if (selected_equip_slot == 5) {
+    	wattron(status, A_REVERSE);
+    }
+    else {
+    	wattroff(status, A_REVERSE);
+    }
     mvwprintw(status, 19, 2, party[selected_member].get_gloves().c_str());
+    if (selected_equip_slot == 6) {
+    	wattron(status, A_REVERSE);
+    }
+    else {
+    	wattroff(status, A_REVERSE);
+    }
     mvwprintw(status, 20, 2, party[selected_member].get_legs().c_str());
-
+	wattroff(status, A_REVERSE);
     wrefresh(status);
     return;
+}
+
+void draw_character_equippable(WINDOW* equip_list, WINDOW* desc) {
+	wclear(equip_list);
+	wclear(desc);
+	box(equip_list, 0, 0);
+	box(desc, 0, 0);
+	mvwprintw(equip_list, 0, (STATUS_WIDTH-2)/2, "EQUIP");
+	int equip_count = 0;
+	int equip_type = selected_equip_slot + 1;
+	for (const auto& slot : inventory) {
+		Item item = get_item_by_id(slot.item_id);
+		if ((int)item.equip_type == equip_type) {
+			if (selected_equip == equip_count) {
+				wattron(equip_list, A_REVERSE);
+				mvwprintw(desc, 2, 1, item.desc.c_str());
+			}
+			mvwprintw(equip_list, 2 * (equip_count+1), 2, "%s x%d", item.name.c_str(), slot.quantity);
+			if (selected_equip == equip_count) {
+				wattroff(equip_list, A_REVERSE);
+			}
+			equip_count++;
+		}
+		max_equip = equip_count;
+	}
+	wrefresh(equip_list);
+	wrefresh(desc);
 }
