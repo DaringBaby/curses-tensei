@@ -30,19 +30,14 @@ int main(int argc, char** argv)
     keypad(stdscr, TRUE);
     start_color();
     current_state = game_states::FIELD;
-    inventory = {
-            {1, 5},
-            {2, 5},
-            {3, 5},
-            {4, 5},
-            {16, 1},
-            {10, 1},
-            {15, 2},
-            {25, 3},
-            {52, 1},
-            {64, 20},
-            {65, 10}
-        };
+    inventory.clear();
+    for (const auto& item : item_db) {
+        if (item.type == ItemType::EQUIP) {
+            add_item(item.id, 1); //
+        } else {
+            add_item(item.id, 5); //
+        }
+    }
 
 
     init_pair(1, COLOR_GREEN, COLOR_BLACK);
@@ -207,6 +202,17 @@ int main(int argc, char** argv)
         	}
         	else if (ch == KEY_DOWN && selected_equip < max_equip-1) {
         		selected_equip++;
+        	}
+        	else if (ch == '\n') {
+        		std::vector<int> equippable = get_equippable_ids(selected_equip_slot);
+        		if (selected_equip >= 0 && selected_equip <(int)equippable.size()) {
+        			equip_item_on_char(selected_member, selected_equip_slot, equippable[selected_equip]);	
+        		}
+        		current_state = game_states::STATUS_MENU;
+        	}
+        	else if (ch == 'r') {
+        		equip_item_on_char(selected_member, selected_equip_slot, 0);
+				current_state = game_states::STATUS_MENU;
         	}
         	break;
         }

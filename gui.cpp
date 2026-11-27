@@ -263,28 +263,36 @@ void draw_character_status(WINDOW *status) {
 }
 
 void draw_character_equippable(WINDOW* equip_list, WINDOW* desc) {
-	wclear(equip_list);
-	wclear(desc);
-	box(equip_list, 0, 0);
-	box(desc, 0, 0);
-	mvwprintw(equip_list, 0, (STATUS_WIDTH-2)/2, "EQUIP");
-	int equip_count = 0;
-	int equip_type = selected_equip_slot + 1;
-	for (const auto& slot : inventory) {
-		Item item = get_item_by_id(slot.item_id);
-		if ((int)item.equip_type == equip_type) {
-			if (selected_equip == equip_count) {
-				wattron(equip_list, A_REVERSE);
-				mvwprintw(desc, 2, 1, item.desc.c_str());
-			}
-			mvwprintw(equip_list, 2 * (equip_count+1), 2, "%s x%d", item.name.c_str(), slot.quantity);
-			if (selected_equip == equip_count) {
-				wattroff(equip_list, A_REVERSE);
-			}
-			equip_count++;
-		}
-		max_equip = equip_count;
-	}
-	wrefresh(equip_list);
-	wrefresh(desc);
+    werase(equip_list);
+    werase(desc);
+    box(equip_list, 0, 0);
+    box(desc, 0, 0);
+    mvwprintw(equip_list, 0, (STATUS_WIDTH - 5) / 2, "EQUIP");
+
+    int equip_count = 0;
+    int equip_type = selected_equip_slot + 1;
+
+    for (const auto& slot : inventory) {
+        Item item = get_item_by_id(slot.item_id);
+        if ((int)item.equip_type == equip_type) {
+            if (selected_equip == equip_count) {
+                wattron(equip_list, A_REVERSE);
+                mvwprintw(desc, 2, 1, "%s", item.desc.c_str());
+            }
+            mvwprintw(equip_list, 2 * (equip_count + 1), 2, "%s x%d", item.name.c_str(), slot.quantity);
+            if (selected_equip == equip_count) {
+                wattroff(equip_list, A_REVERSE);
+            }
+            equip_count++;
+        }
+    }
+
+    max_equip = equip_count;
+
+    if (equip_count == 0) {
+        mvwprintw(equip_list, 2, 2, "(None)");
+    }
+
+    wrefresh(equip_list);
+    wrefresh(desc);
 }
